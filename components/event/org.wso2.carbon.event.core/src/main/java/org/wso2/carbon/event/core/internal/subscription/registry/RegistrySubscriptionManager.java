@@ -19,17 +19,15 @@ package org.wso2.carbon.event.core.internal.subscription.registry;
 import org.apache.axis2.databinding.utils.ConverterUtil;
 import org.wso2.carbon.event.core.exception.EventBrokerConfigurationException;
 import org.wso2.carbon.event.core.exception.EventBrokerException;
-import org.wso2.carbon.event.core.util.EventBrokerConstants;
 import org.wso2.carbon.event.core.internal.util.EventBrokerHolder;
 import org.wso2.carbon.event.core.internal.util.JavaUtil;
 import org.wso2.carbon.event.core.subscription.Subscription;
 import org.wso2.carbon.event.core.subscription.SubscriptionManager;
+import org.wso2.carbon.event.core.util.EventBrokerConstants;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.registry.core.session.UserRegistry;
-import org.wso2.carbon.user.api.UserRealm;
-import org.wso2.carbon.user.api.UserStoreException;
 
 import java.util.*;
 
@@ -81,20 +79,7 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
             if (!userRegistry.resourceExists(this.topicStoragePath)) {
                 userRegistry.put(this.topicStoragePath, userRegistry.newCollection());
             }
-            //allow permissions to root topic
-            //put the permissions to the user store. here we create the resource name from
-            //the topic storage path of the registry.
-            //here we allow permissions at each start up since some times user managers
-            //may have changed.
-            UserRealm userRealm =
-                    EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(EventBrokerHolder.getInstance().getTenantId());
-            for (String role : userRealm.getUserStoreManager().getRoleNames()) {
-                userRealm.getAuthorizationManager().authorizeRole(
-                        role, this.topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
-                userRealm.getAuthorizationManager().authorizeRole(
-                        role, this.topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
 
-            }
             // we need to create the index here only it is not exists.
             if (!userRegistry.resourceExists(this.indexStoragePath)) {
                 userRegistry.put(this.indexStoragePath, userRegistry.newResource());
@@ -102,8 +87,6 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
 
         } catch (RegistryException e) {
             throw new EventBrokerConfigurationException("Can not access the registry ", e);
-        } catch (UserStoreException e) {
-            throw new EventBrokerConfigurationException("Can not access the user registry", e);
         }
     }
 
