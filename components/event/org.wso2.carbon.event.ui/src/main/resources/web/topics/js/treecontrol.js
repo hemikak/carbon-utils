@@ -193,7 +193,6 @@ function addTopicToBackEnd(topic) {
 
                 else {
                     addPermissions();
-//                    updatePermissions();
                 }
             }
         },
@@ -226,13 +225,15 @@ function addTopic() {
 
 function addTopicFromManage() {
     var existingTopic = document.getElementById("existingTopic");
-    var topic = document.getElementById("newTopic");
+    var topic = document.getElementById("topic");
+
     var completeTopic = "";
     if (existingTopic.value == "/") {
         completeTopic = existingTopic.value + topic.value;
     } else {
         completeTopic = existingTopic.value + "/" + topic.value;
     }
+
     var error = "";
 
     if (topic.value == "") {
@@ -246,7 +247,6 @@ function addTopicFromManage() {
 }
 
 function showAddSubTopic() {
-
     var addSubTopicTable = document.getElementById("AddSubTopic");
     if (addSubTopicTable.style.display == "none") {
         addSubTopicTable.style.display = "";
@@ -292,10 +292,6 @@ function unsubscribe(subscriptionId, topic) {
 
 }
 function addPermissions() {
-    var permissionTable = document.getElementById("permissionsTable");
-    var rowCount = permissionTable.rows.length;
-    var parameters = "";
-    for (var i = 1; i < rowCount; i++) {
         var roleName = permissionTable.rows[i].cells[0].innerHTML.replace(/^\s+|\s+$/g, "");
         var subscribeAllowed = permissionTable.rows[i].cells[1].getElementsByTagName("input")[0].checked;
         var publishAllowed = permissionTable.rows[i].cells[2].getElementsByTagName("input")[0].checked;
@@ -328,7 +324,7 @@ function addPermissions() {
             }
         }
     };
-    var request = YAHOO.util.Connect.asyncRequest('POST', "update_role_permissions_ajaxprocessor.jsp", callback, "permissions=" + parameters + "&type=input");
+    var request = YAHOO.util.Connect.asyncRequest('POST', "update_role_permissions_from_session_ajaxprocessor.jsp", callback, "type=input");
 }
 
 
