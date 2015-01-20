@@ -29,7 +29,7 @@
 
     try {
         stub.updatePermission(topic, topicRolePermissionArrayList.toArray(topicRolePermissions));
-        message = "";
+        message = "Topic added successfully";
     } catch (Exception e) {
         message = e.getMessage();
     }

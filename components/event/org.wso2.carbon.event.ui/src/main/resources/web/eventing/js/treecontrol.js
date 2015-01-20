@@ -296,13 +296,12 @@ function addPermissions() {
     {
         success:function(o) {
             if (o.responseText !== undefined) {
-                message = "Topic added successfully";
                 if (o.responseText.indexOf("Error") > -1) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                         location.href = "../topics/topics.jsp"
                     });
                 } else {
-                    CARBON.showInfoDialog("" + message, function() {
+                    CARBON.showInfoDialog("" + o.responseText, function() {
                         location.href = "../topics/topics.jsp"
                     });
                 }

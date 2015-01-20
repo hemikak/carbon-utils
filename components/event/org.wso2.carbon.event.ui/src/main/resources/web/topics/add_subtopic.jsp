@@ -19,6 +19,11 @@
 <link href="css/tree-styles.css" media="all" rel="stylesheet"/>
 <link href="css/dsxmleditor.css" media="all" rel="stylesheet"/>
 
+<script type="text/javascript" src="../admin/js/breadcrumbs.js"></script>
+<script type="text/javascript" src="../admin/js/cookies.js"></script>
+<script type="text/javascript" src="../admin/js/main.js"></script>
+<script type="text/javascript" src="eventing.js"></script>
+
 <jsp:include page="../resources/resources-i18n-ajaxprocessor.jsp"/>
 
 <fmt:bundle basename="org.wso2.carbon.event.ui.i18n.Resources">
@@ -164,7 +169,7 @@
         selectedTopicRolePermissions = topicRolePermissions;
     } else {
         for (TopicRolePermission permission : topicRolePermissions) {
-            if (permission.getRoleName().equals(searchTerm)) {
+            if (permission.getRoleName().toLowerCase().contains(searchTerm.toLowerCase())) {
                 selectedTopicRolePermissions.add(permission);
                 break;
             }
