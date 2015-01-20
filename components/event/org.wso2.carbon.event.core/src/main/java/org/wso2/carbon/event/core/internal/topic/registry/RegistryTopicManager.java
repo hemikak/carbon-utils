@@ -50,11 +50,11 @@ import java.util.regex.Pattern;
  * This class is utilized to perform actions related to topics.
  */
 public class RegistryTopicManager implements TopicManager {
+    private static Log log = LogFactory.getLog(RegistryTopicManager.class);
     private static final String AT_REPLACE_CHAR = "_";
+    private static final String TOPIC_ROLE_PREFIX = "T_";
     private String topicStoragePath;
     private RegistryService registryService;
-    private static final String TOPIC_ROLE_PREFIX = "T_";
-    private static Log log = LogFactory.getLog(RegistryTopicManager.class);
 
     /**
      * Initializes Registry Topic Manager
