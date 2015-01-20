@@ -194,7 +194,7 @@ public class CarbonEventingMessageReceiver extends AbstractMessageReceiver {
                 log.debug("UnSubscribe response recived for Subscription ID : " +
                         subscription.getId());
             }
-            getBrokerService().unsubscribe(subscription.getId());
+            getBrokerService().unSubscribe(subscription.getId());
             if (log.isDebugEnabled()) {
                 log.debug("Sending UnSubscribe responce for Subscription ID : " +
                         subscription.getId());

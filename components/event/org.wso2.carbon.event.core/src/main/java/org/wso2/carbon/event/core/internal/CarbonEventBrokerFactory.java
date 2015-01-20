@@ -68,7 +68,7 @@ public class CarbonEventBrokerFactory implements EventBrokerFactory {
                         EventBrokerConstants.EB_CONF_ELE_DELIVERY_MANAGER));
         DeliveryManagerFactory delivaryManagerfactory =
                        (DeliveryManagerFactory) JavaUtil.getObject(delivaryManager);
-        carbonEventBroker.setDelivaryManager(
+        carbonEventBroker.setDeliveryManager(
                 delivaryManagerfactory.getDeliveryManger(delivaryManager));
 
         // getting the event publisher properties and setting the executor

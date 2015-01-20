@@ -3,6 +3,7 @@
 <%@ page import="org.wso2.carbon.event.client.broker.BrokerClient" %>
 <%@ page import="org.wso2.carbon.event.ui.UIUtils" %>
 <%@ page import="java.io.ByteArrayInputStream" %>
+<%@ page import="javax.xml.stream.XMLStreamReader" %>
 
 <%
 

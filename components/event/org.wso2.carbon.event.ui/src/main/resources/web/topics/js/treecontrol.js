@@ -213,7 +213,7 @@ function addTopic() {
     var error = "";
     topic.value = topic.value.replace(/^\s+|\s+$/g, "");
     if (topic.value == "") {
-        error = "Topic can not be empty.\n";
+        error = "Topic name cannot be empty.\n";
     }
 
     if (error != "") {
@@ -226,7 +226,7 @@ function addTopic() {
 
 function addTopicFromManage() {
     var existingTopic = document.getElementById("existingTopic");
-    var topic = document.getElementById("newTopic");
+    var topic = document.getElementById("topic");
     var completeTopic = "";
     if (existingTopic.value == "/") {
         completeTopic = existingTopic.value + topic.value;
@@ -236,7 +236,7 @@ function addTopicFromManage() {
     var error = "";
 
     if (topic.value == "") {
-        error = "Topic can not be empty.\n";
+        error = "Topic name cannot be empty.\n";
     }
     if (error != "") {
         CARBON.showErrorDialog(error);
