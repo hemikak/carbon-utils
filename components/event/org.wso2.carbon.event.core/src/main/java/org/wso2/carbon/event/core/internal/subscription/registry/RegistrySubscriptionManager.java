@@ -191,12 +191,12 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         topicName = topicName.replaceAll("\\.", "/");
 
         if (!topicName.startsWith("/")) {
-            resourcePath += "/";
+            resourcePath = resourcePath + "/";
         }
 
         // this topic name can have # and * marks if the user wants to subscribes to the
         // child topics as well. but we consider the topic here as the topic name just before any
-        // special charactor.
+        // special character.
         // eg. if topic name is myTopic/*/* then topic name is myTopic
         if (topicName.contains("*")) {
             topicName = topicName.substring(0, topicName.indexOf("*"));
@@ -204,12 +204,12 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
             topicName = topicName.substring(0, topicName.indexOf("#"));
         }
 
-        resourcePath += topicName;
+        resourcePath = resourcePath + topicName;
 
         if (!resourcePath.endsWith("/")) {
-            resourcePath += "/";
+            resourcePath = resourcePath + "/";
         }
-        resourcePath += EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME + "/" + subscriptionID;
+        resourcePath = resourcePath + (EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME + "/" + subscriptionID);
         return resourcePath;
     }
 
@@ -234,15 +234,17 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                 for (Enumeration e = savedSubscriptions.propertyNames(); e.hasMoreElements(); ) {
                     subscriptionID = (String) e.nextElement();
                     // when the registry is remotely mount to another registry. then registry automatically added
-                    // some properties stay with registry we need to skip them.
+                    // some properties stays with registry we need to skip them.
                     if (!subscriptionID.startsWith("registry")) {
                         topicName = topicIndexResource.getProperty(subscriptionID);
-                        subscriptionResource = userRegistry.get(getResourcePath(subscriptionID, topicName));
-                        subscription = JavaUtil.getSubscription(subscriptionResource);
-                        subscription.setId(subscriptionID);
-                        subscription.setTopicName(topicName);
-                        subscription.setTenantId(EventBrokerHolder.getInstance().getTenantId());
-                        subscriptions.add(subscription);
+                        if (userRegistry.resourceExists(getResourcePath(subscriptionID, topicName))) {
+                            subscriptionResource = userRegistry.get(getResourcePath(subscriptionID, topicName));
+                            subscription = JavaUtil.getSubscription(subscriptionResource);
+                            subscription.setId(subscriptionID);
+                            subscription.setTopicName(topicName);
+                            subscription.setTenantId(EventBrokerHolder.getInstance().getTenantId());
+                            subscriptions.add(subscription);
+                        }
                     }
                 }
             }
@@ -264,7 +266,7 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
             Resource topicIndexResource = userRegistry.get(this.indexStoragePath);
             String subscriptionPath = getResourcePath(id, topicIndexResource.getProperty(id));
-            if (subscriptionPath != null) {
+            if (subscriptionPath != null && userRegistry.resourceExists(subscriptionPath)) {
                 Resource subscriptionResource = userRegistry.get(subscriptionPath);
                 Subscription subscription = JavaUtil.getSubscription(subscriptionResource);
                 subscription.setTenantId(EventBrokerHolder.getInstance().getTenantId());

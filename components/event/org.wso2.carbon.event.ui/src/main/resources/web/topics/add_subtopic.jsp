@@ -171,7 +171,6 @@
         for (TopicRolePermission permission : topicRolePermissions) {
             if (permission.getRoleName().toLowerCase().contains(searchTerm.toLowerCase())) {
                 selectedTopicRolePermissions.add(permission);
-                break;
             }
         }
     }

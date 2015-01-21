@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Carbon event broker
+ * Carbon event broker implementation
  */
 public class CarbonEventBroker implements EventBroker {
 
