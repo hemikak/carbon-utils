@@ -12,6 +12,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!--Local js includes-->
+<script type="text/javascript" src="../admin/js/breadcrumbs.js"></script>
+<script type="text/javascript" src="../admin/js/cookies.js"></script>
+<script type="text/javascript" src="../admin/js/main.js"></script>
 <script type="text/javascript" src="js/treecontrol.js"></script>
 <script type="text/javascript" src="js/topics.js"></script>
 <script type="text/javascript" src="js/eventing_utils.js"></script>
