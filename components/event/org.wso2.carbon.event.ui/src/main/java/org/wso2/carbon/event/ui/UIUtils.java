@@ -5,6 +5,7 @@ import org.apache.axis2.client.Options;
 import org.apache.axis2.context.ConfigurationContext;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.event.client.broker.BrokerClient;
+import org.wso2.carbon.event.stub.internal.xsd.TopicRolePermission;
 import org.wso2.carbon.ui.CarbonUIUtil;
 import org.wso2.carbon.um.ws.api.stub.RemoteAuthorizationManagerServiceStub;
 import org.wso2.carbon.user.mgt.ui.UserAdminClient;
@@ -13,6 +14,7 @@ import org.wso2.carbon.utils.ServerConstants;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 public class UIUtils {
     
@@ -84,5 +86,28 @@ public class UIUtils {
             return UIConstants.SUBSCRIPTION_MODE_0_DESCRIPTION;
         }
     }
-    
+
+    /**
+     * Filter the full user-roles list to suit the range
+     *
+     * @param fullList      full list of roles
+     * @param startingIndex starting index to filter
+     * @param maxRolesCount maximum number of roles that the filtered list can contain
+     * @return ArrayList<TopicRolePermission>
+     */
+    public static ArrayList<TopicRolePermission> getFilteredRoleList
+    (ArrayList<TopicRolePermission> fullList, int startingIndex, int maxRolesCount) {
+        int resultSetSize = maxRolesCount;
+
+        if ((fullList.size() - startingIndex) < maxRolesCount) {
+            resultSetSize = (fullList.size() - startingIndex);
+        }
+
+        ArrayList<TopicRolePermission> resultList = new ArrayList<TopicRolePermission>();
+        for (int i = startingIndex; i < startingIndex + resultSetSize; i++) {
+            resultList.add(fullList.get(i));
+        }
+
+        return resultList;
+    }
 }

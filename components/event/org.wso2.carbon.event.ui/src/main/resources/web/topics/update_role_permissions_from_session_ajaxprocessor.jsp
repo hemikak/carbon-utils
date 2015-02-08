@@ -5,10 +5,11 @@
 <%@ page import="org.wso2.carbon.event.stub.internal.TopicManagerAdminServiceStub" %>
 <%@ page import="org.wso2.carbon.event.stub.internal.xsd.TopicRolePermission" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.net.URLDecoder" %>
 <%
     ConfigurationContext configContext = (ConfigurationContext) config.getServletContext()
             .getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
-
     //Server URL which is defined in the server.xml
     String serverURL = CarbonUIUtil.getServerURL(config.getServletContext(),
             session) + "TopicManagerAdminService.TopicManagerAdminServiceHttpsSoap12Endpoint";
@@ -22,22 +23,16 @@
     option.setProperty(org.apache.axis2.transport.http.HTTPConstants.COOKIE_STRING, cookie);
     String message = "";
 
-    try {
-        String topic = request.getParameter("topic");
-        stub.addTopic(topic);
-        session.removeAttribute("topic");
-        session.setAttribute("topic", topic);
-    } catch (Exception e) {
-        message = "Error: " + e.getMessage();
+    String topic = (String) session.getAttribute("topic");
+    ArrayList<TopicRolePermission> topicRolePermissionArrayList = (ArrayList<TopicRolePermission>) session.getAttribute("topicRolePermissions");
+    TopicRolePermission[] topicRolePermissions = new TopicRolePermission[topicRolePermissionArrayList.size()];
 
-%>
-<%=message%>
-<%
-        return;
+    try {
+        stub.updatePermission(topic, topicRolePermissionArrayList.toArray(topicRolePermissions));
+        message = "";
+    } catch (Exception e) {
+        message = e.getMessage();
     }
 
-    session.removeAttribute("topicWsSubscriptions");
-    session.removeAttribute("topicJMSSubscriptions");
-    message = "Topic Added successfully";
+    session.removeAttribute("topicRolePermissions");
 %><%=message%>
-

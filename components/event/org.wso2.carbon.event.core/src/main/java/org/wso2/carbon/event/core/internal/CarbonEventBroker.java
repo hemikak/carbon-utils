@@ -17,7 +17,7 @@
 package org.wso2.carbon.event.core.internal;
 
 import org.apache.axiom.util.UIDGenerator;
-import org.wso2.carbon.base.MultitenantConstants;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.event.core.EventBroker;
 import org.wso2.carbon.event.core.Message;
 import org.wso2.carbon.event.core.delivery.DeliveryManager;
@@ -30,10 +30,6 @@ import org.wso2.carbon.event.core.subscription.Subscription;
 import org.wso2.carbon.event.core.subscription.SubscriptionManager;
 import org.wso2.carbon.event.core.topic.TopicManager;
 import org.wso2.carbon.event.core.util.EventBrokerConstants;
-import org.wso2.carbon.user.api.AuthorizationManager;
-import org.wso2.carbon.user.api.UserRealm;
-import org.wso2.carbon.user.api.UserStoreException;
-import org.wso2.carbon.context.CarbonContext;
 
 import java.util.Calendar;
 import java.util.List;
@@ -85,28 +81,6 @@ public class CarbonEventBroker implements EventBroker {
     }
 
     public void initializeTenant() throws EventBrokerException {
-
-        // first we need to authorize all the roles to the topic root
-        try {
-            String topicStoragePath = subscriptionManager.getTopicStoragePath();
-            if (topicStoragePath != null) {
-                UserRealm userRealm =
-                        EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(EventBrokerHolder.getInstance().getTenantId());
-                AuthorizationManager authzManager = userRealm.getAuthorizationManager();
-                for (String role : userRealm.getUserStoreManager().getRoleNames()) {
-					if (!authzManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE)) {
-                		authzManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
-                	}
-                	if (!authzManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH)) {
-                		authzManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
-                    }
-                }
-            }
-        } catch (EventBrokerException e) {
-            throw new EventBrokerConfigurationException("Can not get the subscriptions ", e);
-        } catch (UserStoreException e) {
-            throw new EventBrokerConfigurationException("Can not get roles from user store", e);
-        }
         this.delivaryManager.initializeTenant();
         loadExistingSubscriptions();
     }
