@@ -1,24 +1,22 @@
 // Calendar handlers
-var cal1;
+var expirationTimeCalendar;
 YAHOO.util.Event.onDOMReady(function() {
-    cal1 = new YAHOO.widget.Calendar("cal1", "cal1Container", { title:"Choose a date:", close:true });
-    cal1.render();
-    cal1.selectEvent.subscribe(calSelectHandler, cal1, true)
+    expirationTimeCalendar = new YAHOO.widget.Calendar("cal1", "cal1Container", { title:"Choose a date:", close:true });
+    expirationTimeCalendar.render();
+    expirationTimeCalendar.selectEvent.subscribe(calSelectHandler, expirationTimeCalendar, true)
 });
 
-function calSelectHandler(type, args, obj) {
-    var selected = args[0];
-    //var selDate = this.toDate(selected[0]);
-    var selDate = args[0][0][0] + "/" + args[0][0][1] + "/" + args[0][0][2];
+function calSelectHandler(type, date, obj) {
+    var selDate = date[0][0][0] + "/" + date[0][0][1] + "/" + date[0][0][2];
     var activeTime = document.getElementById("expirationTime");
     clearTextIn(activeTime);
     activeTime.value = selDate;
-    cal1.hide();
+    expirationTimeCalendar.hide();
 }
 
 // Shows the calender pop up. Used when adding a subscription.
 function showCalendar() {
-    cal1.show();
+    expirationTimeCalendar.show();
 }
 
 //// Watermark for a text box
@@ -169,7 +167,6 @@ function addTopicToBackEnd(topic) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                     });
                 }
-
                 else {
                     addPermissions();
 //                    updatePermissions();
@@ -296,13 +293,12 @@ function addPermissions() {
     {
         success:function(o) {
             if (o.responseText !== undefined) {
-                message = "Topic added successfully";
                 if (o.responseText.indexOf("Error") > -1) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                         location.href = "../topics/topics.jsp"
                     });
                 } else {
-                    CARBON.showInfoDialog("" + message, function() {
+                    CARBON.showInfoDialog("" + o.responseText, function() {
                         location.href = "../topics/topics.jsp"
                     });
                 }
@@ -337,13 +333,12 @@ function updatePermissions() {
     {
         success:function(o) {
             if (o.responseText !== undefined) {
-                message = "Updated permissions successfully";
                 if (o.responseText.indexOf("Error") > -1) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                         location.href = "../topics/topic_manage.jsp"
                     });
                 } else {
-                    CARBON.showInfoDialog("" + message, function() {
+                    CARBON.showInfoDialog("" + o.responseText, function() {
                         location.href = "../topics/topic_manage.jsp"
                     });
                 }

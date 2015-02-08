@@ -351,7 +351,7 @@ public class RegistryTopicManager implements TopicManager {
     }
 
     /**
-     * Adds a new subscriptions for topic
+     * Adds a subscriptions to a list using the resource path provided
      *
      * @param resourcePath  the topic nam
      * @param subscriptions a list of subscriptions for the topic
@@ -480,7 +480,7 @@ public class RegistryTopicManager implements TopicManager {
                 return false;
             }
         } catch (RegistryException e) {
-            throw new EventBrokerException("Cannot access the config registry");
+            throw new EventBrokerException("Cannot access the config registry", e);
         }
     }
 
@@ -506,8 +506,8 @@ public class RegistryTopicManager implements TopicManager {
      *
      * @param username        name of the logged in user
      * @param destinationName destination name. Either topic or queue name
-     * @param destinationId   Id given to the destination
-     * @param userRealm       User's Realm
+     * @param destinationId   ID given to the destination
+     * @param userRealm       the  user store
      * @throws UserStoreException
      */
     private static void authorizePermissionsToLoggedInUser(String username, String destinationName,
@@ -518,19 +518,25 @@ public class RegistryTopicManager implements TopicManager {
         //For registry we use a modified queue name
         String newDestinationName = destinationName.replace("@", AT_REPLACE_CHAR);
 
+        // creating the internal role name
         String roleName = UserCoreUtil.addInternalDomainName(TOPIC_ROLE_PREFIX +
                                                              newDestinationName.replace("/", "-"));
+
+        // the interface to store user data
         UserStoreManager userStoreManager = CarbonContext.getThreadLocalCarbonContext().getUserRealm().getUserStoreManager();
 
         if (!userStoreManager.isExistingRole(roleName)) {
             String[] user = {MultitenantUtils.getTenantAwareUsername(username)};
 
-            // Create a role for the topic and assign the user to that role.
+            // adds the internal role to user store
             userStoreManager.addRole(roleName, user, null);
+            // gives subscribe permissions to the internal role in the user store
             userRealm.getAuthorizationManager().authorizeRole(
                     roleName, destinationId, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
+            // gives publish permissions to the internal role in the user store
             userRealm.getAuthorizationManager().authorizeRole(
                     roleName, destinationId, EventBrokerConstants.EB_PERMISSION_PUBLISH);
+            // gives change permissions to the internal role in the user store
             userRealm.getAuthorizationManager().authorizeRole(
                     roleName, destinationId, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
 

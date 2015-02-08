@@ -62,6 +62,12 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
      */
     private String indexStoragePath;
 
+    /**
+     * Adds topic storage path and index storage path to user registry
+     * @param topicStoragePath topic storage path. the path where topics will be stored.
+     * @param indexStoragePath index storage path.
+     * @throws EventBrokerConfigurationException
+     */
     public RegistrySubscriptionManager(String topicStoragePath, String indexStoragePath)
             throws EventBrokerConfigurationException {
 

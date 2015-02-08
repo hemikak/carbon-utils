@@ -47,9 +47,9 @@
     TopicRolePermission[] topicRolePermissions = new TopicRolePermission[topicRolePermissionArrayList.size()];
     try {
         stub.updatePermission(topic, topicRolePermissionArrayList.toArray(topicRolePermissions));
-        message = "";
+        message = "Updated permissions successfully";
     } catch (Exception e) {
-        message = e.getMessage();
+        message = "Error in adding/updating permissions : " + e.getMessage();
     }
     session.setAttribute("topicRolePermission", stub.getTopicRolePermissions(topic));
 %><%=message%>

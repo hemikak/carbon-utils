@@ -36,18 +36,22 @@
 <script type="text/javascript">
 
     jQuery(document).ready(function () {
+        // changing pagination links when topic name text changes
         jQuery('#topic').keyup(function () {
             changeAllLinks();
         });
 
+        // changing pagination links when role search text changes
         jQuery('#search').keyup(function () {
             changeAllLinks();
         });
 
+        // updating permissions to the sessions. the checkboxes mentioned here are the publish and consume permission checkboxes
         jQuery('.checkboxChanged').click(function () {
             var $element = jQuery(this);
             var role = $element.attr('role');
-            var checked = $element.attr('checked');
+            // prop is used because when unchecked, attr gives undefined
+            var checked = $element.prop('checked');
             var action = $element.attr('permission');
 
             jQuery.ajax({
@@ -60,6 +64,7 @@
         });
     });
 
+    // changes links in pagination with search text and topic name
     function changeAllLinks() {
         jQuery('#permissionTable').find('tr td a').each(
                 function () {
@@ -79,6 +84,7 @@
         );
     }
 
+    // searching a role
     function searchRole() {
         var searchTerm = jQuery('#search').val();
         var topicName = jQuery('#topic').val();
